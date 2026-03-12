@@ -57,6 +57,14 @@ async function loadModel() {
     result.meshes.forEach(mesh => {
       meshMap[mesh.name] = mesh;
     });
+    // Reduce shininess on all meshes
+    result.meshes.forEach(mesh => {
+      if (mesh.material instanceof BABYLON.PBRMaterial) {
+        mesh.material.roughness = 0.8;
+        mesh.material.metallic = 0.1;
+      }
+    });
+
     // Find LED mesh
     ledMesh = meshMap[LED_DEFAULTS.meshName] || null;
     if (!ledMesh) {
