@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enso Studio</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ─── TOOLBAR ─────────────────────────────────────────────────────────── -->
+  <header id="toolbar">
+    <h1>Enso <span>Studio</span></h1>
+    <div id="export-controls">
+      <div id="bg-toggle">
+        <button class="bg-btn active" data-bg="background">Background</button>
+        <button class="bg-btn" data-bg="transparent">Transparent</button>
+      </div>
+      <button id="export-btn">Export PNG</button>
+    </div>
+  </header>
+
+  <!-- ─── APP ─────────────────────────────────────────────────────────────── -->
+  <div id="app">
+
+    <!-- ─── CONTROLS PANEL ────────────────────────────────────────────────── -->
+    <aside id="panel">
+
+      <!-- Background -->
+      <div class="panel-section">
+        <h2>Background</h2>
+        <div class="btn-grid">
+          <button class="preset-btn bg-preset-btn active" data-preset="darkNeutral">Dark</button>
+          <button class="preset-btn bg-preset-btn" data-preset="lightNeutral">Light</button>
+          <button class="preset-btn bg-preset-btn" data-preset="brand">Brand</button>
+          <button class="preset-btn bg-preset-btn" data-preset="brandDark">Brand Dark</button>
+        </div>
+      </div>
+
+      <!-- Lighting -->
+      <div class="panel-section">
+        <h2>Lighting</h2>
+        <div class="btn-grid">
+          <button class="preset-btn lighting-btn active" data-preset="studio">Studio</button>
+          <button class="preset-btn lighting-btn" data-preset="dramatic">Dramatic</button>
+          <button class="preset-btn lighting-btn" data-preset="outdoor">Outdoor</button>
+          <button class="preset-btn lighting-btn" data-preset="neon">Neon</button>
+        </div>
+      </div>
+
+      <!-- Camera Angles -->
+      <div class="panel-section">
+        <h2>Camera</h2>
+        <div class="btn-grid cols-3">
+          <button class="preset-btn camera-btn" data-preset="hero">Hero</button>
+          <button class="preset-btn camera-btn" data-preset="side">Side</button>
+          <button class="preset-btn camera-btn" data-preset="top">Top</button>
+          <button class="preset-btn camera-btn" data-preset="iso">Iso</button>
+        </div>
+      </div>
+
+      <!-- LED -->
+      <div class="panel-section">
+        <h2>LED</h2>
+        <div class="led-toggle">
+          <button class="preset-btn" id="led-on-btn">On</button>
+          <button class="preset-btn" id="led-blink-btn">Blink</button>
+          <button class="preset-btn" id="led-off-btn">Off</button>
+        </div>
+        <div id="led-swatches">
+          <!-- Swatches injected by main.js -->
+        </div>
+      </div>
+
+
+    </aside>
+
+    <!-- ─── 3D VIEWPORT ───────────────────────────────────────────────────── -->
+    <div id="viewport">
+      <canvas id="renderCanvas"></canvas>
+
+      <div id="loading">
+        <div class="spinner-wrap">
+          <div class="spinner"></div>
+          <p>Loading model…</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── BABYLON.JS ───────────────────────────────────────────────────────── -->
+  <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
+  <!-- ─── APP SCRIPTS ──────────────────────────────────────────────────────── -->
+  <script src="presets.js"></script>
+  <script src="main.js"></script>
+
+</body>
+</html>
