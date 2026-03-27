@@ -115,7 +115,7 @@ async function loadModel() {
           <li>Place the file at <code>models/device.glb</code> inside the project folder</li>
           <li>Open Terminal on your computer</li>
           <li>Type <code>cd </code> (with a space), then drag the project folder into the Terminal window and press Enter</li>
-          <li>Run <code>npx serve .</code> and press Enter</li>
+          <li>Type <code>npx serve .</code> and press Enter</li>
           <li>Open <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> in your browser — keep Terminal open while using the app</li>
         </ol>
       </div>`;
