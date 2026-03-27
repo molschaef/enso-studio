@@ -186,23 +186,17 @@ function applyLightingPreset(name) {
 }
 
 function applyBackgroundPreset(name) {
-  // Remove image layer if switching away from sunset
   if (bgLayer) { bgLayer.dispose(); bgLayer = null; }
 
-  if (name === "sunset") {
-    scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
-    bgLayer = new BABYLON.Layer("sunset", "backgrounds/sunset.jpg", scene, true);
-  } else {
-    const preset = BACKGROUND_PRESETS[name];
-    if (!preset) return;
-    const r = parseInt(preset.hex.slice(1, 3), 16) / 255;
-    const g = parseInt(preset.hex.slice(3, 5), 16) / 255;
-    const b = parseInt(preset.hex.slice(5, 7), 16) / 255;
-    scene.clearColor = new BABYLON.Color4(r, g, b, 1);
-  }
+  const preset = BACKGROUND_PRESETS[name];
+  if (!preset) return;
+  const r = parseInt(preset.hex.slice(1, 3), 16) / 255;
+  const g = parseInt(preset.hex.slice(3, 5), 16) / 255;
+  const b = parseInt(preset.hex.slice(5, 7), 16) / 255;
+  scene.clearColor = new BABYLON.Color4(r, g, b, 1);
 
   const overlay = document.getElementById("spider-overlay");
-  if (overlay) overlay.classList.toggle("light-bg", name === "lightNeutral" || name === "sunset");
+  if (overlay) overlay.classList.toggle("light-bg", name === "lightNeutral");
 
   document.querySelectorAll(".bg-preset-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.preset === name);
