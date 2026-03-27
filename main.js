@@ -578,7 +578,18 @@ function spawnSpider() {
 
   wrapper._retractNow = () => {
     const currentHeight = parseFloat(thread.style.height) || 0;
-    retract(performance.now(), currentHeight);
+    const fastRetractDuration = retractDuration / 2;
+    requestAnimationFrame(function frame(now) {
+      if (!wrapper._retractStart) wrapper._retractStart = now;
+      const t = Math.min((now - wrapper._retractStart) / fastRetractDuration, 1);
+      thread.style.height = (1 - t) * currentHeight + "px";
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        wrapper.remove();
+        activeSpiders--;
+      }
+    });
   };
 
   drop(performance.now());
