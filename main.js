@@ -112,7 +112,7 @@ async function loadModel() {
         <ol class="err-steps">
           <li>Clone or download <a href="https://github.com/molschaef/enso-studio" target="_blank" rel="noopener">this repository</a> from GitHub</li>
           <li>Download <a href="https://drive.google.com/file/d/1LmrQON7y6RHz7d504sPs9CjThkbF0iZF/view?usp=sharing" target="_blank" rel="noopener">device.glb from Google Drive</a></li>
-          <li>Place the file at <code>models/device.glb</code> inside the project folder</li>
+          <li>Place <code>device.glb</code> inside the <code>models/</code> folder in the project folder</li>
           <li>Open Terminal on your computer</li>
           <li>Type <code>cd </code> (with a space), then drag the project folder into the Terminal window and press Enter</li>
           <li>Type <code>npx serve .</code> and press Enter</li>
