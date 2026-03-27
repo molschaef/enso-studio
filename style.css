@@ -262,8 +262,8 @@ body {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  z-index: 6;
   overflow: hidden;
-  z-index: 3;
 }
 
 .spider-wrapper {
