@@ -3,7 +3,7 @@
 
 const BACKGROUND_PRESETS = {
   darkNeutral:  { label: "Dark",       hex: "#111114" },
-  lightNeutral: { label: "Light",      hex: "#f0f0f2" },
+  lightNeutral: { label: "Light",      hex: "#F6F6F3" },
   brand:        { label: "Brand",      hex: "#007B34" },
   brandDark:    { label: "Brand Dark", hex: "#003d1a" },
 };
