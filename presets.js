@@ -109,7 +109,7 @@ const CAMERA_PRESETS = {
 // LED presets (default state)
 const LED_DEFAULTS = {
   meshName: "LED_indicator",  // Name of the LED mesh in the .glb file — update to match yours
-  defaultOn: true,
+  defaultOn: false,
   defaultColor: "#00ff44",
 };
 
