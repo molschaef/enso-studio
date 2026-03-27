@@ -310,14 +310,23 @@ body {
 }
 
 /* ─── LOADING OVERLAY ──────────────────────────────────────────────────────── */
+#loading-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 5;
+  pointer-events: none;
+  display: none;
+}
+
 #loading {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.7);
-  z-index: 5;
+  background: transparent;
+  z-index: 7;
   pointer-events: none;
 }
 

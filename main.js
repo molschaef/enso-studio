@@ -52,6 +52,8 @@ async function initScene() {
 
 async function loadModel() {
   const loadingEl = document.getElementById("loading");
+  const backdropEl = document.getElementById("loading-backdrop");
+  backdropEl.style.display = "block";
 
   try {
     const result = await BABYLON.SceneLoader.ImportMeshAsync("", "models/", "device.glb", scene);
@@ -87,6 +89,7 @@ async function loadModel() {
     // Auto-fit camera to model
     fitCameraToModel(result.meshes);
     loadingEl.style.display = "none";
+    backdropEl.style.display = "none";
 
     // Generate favicon from the scene
     setTimeout(async () => {
