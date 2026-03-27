@@ -576,6 +576,11 @@ function spawnSpider() {
     });
   }
 
+  wrapper._retractNow = () => {
+    const currentHeight = parseFloat(thread.style.height) || 0;
+    retract(performance.now(), currentHeight);
+  };
+
   drop(performance.now());
 }
 
@@ -594,8 +599,7 @@ function toggleSpideyMode() {
     spawnSpider();
     scheduleSpider();
   } else {
-    document.querySelectorAll(".spider-wrapper").forEach(el => el.remove());
-    activeSpiders = 0;
+    document.querySelectorAll(".spider-wrapper").forEach(el => el._retractNow && el._retractNow());
   }
 }
 
