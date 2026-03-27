@@ -113,7 +113,7 @@ async function loadModel() {
           <li>Clone or download <a href="https://github.com/molschaef/enso-studio" target="_blank" rel="noopener">this repository</a> from GitHub</li>
           <li>Download <a href="https://drive.google.com/file/d/1LmrQON7y6RHz7d504sPs9CjThkbF0iZF/view?usp=sharing" target="_blank" rel="noopener">device.glb from Google Drive</a></li>
           <li>Place the file at <code>models/device.glb</code> inside the project folder</li>
-          <li>Run <code>npx serve .</code> in the project folder and open <code>http://localhost:3000</code></li>
+          <li>Open Terminal, navigate to the project folder with <code>cd path/to/enso-studio</code>, run <code>npx serve .</code>, then open <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> in your browser. Keep the Terminal window open while using the app.</li>
         </ol>
       </div>`;
     console.error("Model load error:", err);
