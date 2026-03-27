@@ -3,7 +3,10 @@
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
 
-let scene, camera, ambientLight, dynamicLights = [], glowLayer;
+let scene, camera, ambientLight, dynamicLights = [], glowLayer, bgLayer;
+let dollyObserver = null;
+let dollyActiveName = null;
+let dollySpeed = 1.0;
 let meshMap = {};
 let ledMesh = null;
 let ledOn = LED_DEFAULTS.defaultOn;
@@ -103,8 +106,15 @@ async function loadModel() {
     loadingEl.innerHTML = `
       <div class="load-error">
         <p>Could not load <strong>models/device.glb</strong></p>
-        <p>Export your .blend file to GLB and place it in the <code>models/</code> folder.</p>
         <p class="err-detail">${err.message || err}</p>
+        <hr class="err-divider" />
+        <p class="err-setup-title">To run this project yourself:</p>
+        <ol class="err-steps">
+          <li>Clone or download this repository from GitHub</li>
+          <li>Download <a href="https://drive.google.com/file/d/1LmrQON7y6RHz7d504sPs9CjThkbF0iZF/view?usp=sharing" target="_blank" rel="noopener">device.glb from Google Drive</a></li>
+          <li>Place the file at <code>models/device.glb</code> inside the project folder</li>
+          <li>Run <code>npx serve .</code> in the project folder and open <code>http://localhost:3000</code></li>
+        </ol>
       </div>`;
     console.error("Model load error:", err);
   }
@@ -176,13 +186,23 @@ function applyLightingPreset(name) {
 }
 
 function applyBackgroundPreset(name) {
-  const preset = BACKGROUND_PRESETS[name];
-  if (!preset) return;
+  // Remove image layer if switching away from sunset
+  if (bgLayer) { bgLayer.dispose(); bgLayer = null; }
 
-  const r = parseInt(preset.hex.slice(1, 3), 16) / 255;
-  const g = parseInt(preset.hex.slice(3, 5), 16) / 255;
-  const b = parseInt(preset.hex.slice(5, 7), 16) / 255;
-  scene.clearColor = new BABYLON.Color4(r, g, b, 1);
+  if (name === "sunset") {
+    scene.clearColor = new BABYLON.Color4(0, 0, 0, 1);
+    bgLayer = new BABYLON.Layer("sunset", "backgrounds/sunset.jpg", scene, true);
+  } else {
+    const preset = BACKGROUND_PRESETS[name];
+    if (!preset) return;
+    const r = parseInt(preset.hex.slice(1, 3), 16) / 255;
+    const g = parseInt(preset.hex.slice(3, 5), 16) / 255;
+    const b = parseInt(preset.hex.slice(5, 7), 16) / 255;
+    scene.clearColor = new BABYLON.Color4(r, g, b, 1);
+  }
+
+  const overlay = document.getElementById("spider-overlay");
+  if (overlay) overlay.classList.toggle("light-bg", name === "lightNeutral" || name === "sunset");
 
   document.querySelectorAll(".bg-preset-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.preset === name);
@@ -320,6 +340,49 @@ function applyColorToMesh(mesh, color3) {
   mesh.material.albedoColor = color3;
 }
 
+// ─── DOLLY / ANIMATION ───────────────────────────────────────────────────────
+
+function startDolly(name) {
+  stopDolly();
+  dollyActiveName = name;
+
+  let lastTime = performance.now();
+  const baseRadius = camera.radius;
+  const baseBeta = camera.beta;
+  let elapsed = 0;
+
+  dollyObserver = scene.onBeforeRenderObservable.add(() => {
+    const now = performance.now();
+    const dt = Math.min((now - lastTime) / 1000, 0.1); // cap dt to avoid jumps
+    lastTime = now;
+    elapsed += dt;
+
+    if (name === "turntable") {
+      camera.alpha += 0.6 * dollySpeed * dt;
+    } else if (name === "float") {
+      camera.alpha += 0.5 * dollySpeed * dt;
+      camera.beta = baseBeta + Math.sin(elapsed * 0.4 * dollySpeed) * 0.18;
+    } else if (name === "push") {
+      camera.radius = baseRadius * (1 - 0.3 * Math.sin(elapsed * 0.5 * dollySpeed));
+    }
+  });
+
+  document.querySelectorAll(".dolly-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.dolly === name);
+  });
+  document.getElementById("dolly-stop-btn").classList.remove("active");
+}
+
+function stopDolly() {
+  if (dollyObserver) {
+    scene.onBeforeRenderObservable.remove(dollyObserver);
+    dollyObserver = null;
+  }
+  dollyActiveName = null;
+  document.querySelectorAll(".dolly-btn").forEach(btn => btn.classList.remove("active"));
+  document.getElementById("dolly-stop-btn").classList.add("active");
+}
+
 // ─── EXPORT PNG ──────────────────────────────────────────────────────────────
 
 async function exportPNG() {
@@ -414,8 +477,126 @@ function buildUI() {
     });
   });
 
+  // Dolly animation buttons
+  document.querySelectorAll(".dolly-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (dollyActiveName === btn.dataset.dolly) stopDolly();
+      else startDolly(btn.dataset.dolly);
+    });
+  });
+
+  document.getElementById("dolly-stop-btn").addEventListener("click", stopDolly);
+
+  // Speed buttons
+  document.querySelectorAll(".dolly-speed-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      dollySpeed = parseFloat(btn.dataset.speed);
+      document.querySelectorAll(".dolly-speed-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (dollyActiveName) startDolly(dollyActiveName); // restart to pick up new speed
+    });
+  });
+
+  // Spidey mode
+  document.getElementById("spidey-btn").addEventListener("click", toggleSpideyMode);
+
   // Export button
   document.getElementById("export-btn").addEventListener("click", exportPNG);
+}
+
+// ─── SPIDERS ─────────────────────────────────────────────────────────────────
+
+const SPIDER_ARTS = [
+  "/\\(oo)/\\",
+  "  (°o°)\n /|   |\\",
+  "  (o.o)\n /\\   /\\",
+  " \\(^ᴥ^)/",
+  "  (>.>)\n /|   |\\",
+  "  (o_o)\n  /| |\\",
+];
+
+let activeSpiders = 0;
+const MAX_SPIDERS = 4;
+let spideyModeActive = false;
+
+function spawnSpider() {
+  const overlay = document.getElementById("spider-overlay");
+  if (!overlay || !spideyModeActive || activeSpiders >= MAX_SPIDERS) return;
+  activeSpiders++;
+
+  const x = 4 + Math.random() * 90;
+  const dropFraction = 0.25 + Math.random() * 0.35; // 25–60% of viewport height
+  const dropDuration = 9000 + Math.random() * 7000;
+  const hangDuration = 1500 + Math.random() * 4000;
+  const retractDuration = dropDuration * 0.55;
+  const swingAmp = 0.7 + Math.random() * 1.8;
+  const swingFreq = 550 + Math.random() * 450;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "spider-wrapper";
+  wrapper.style.left = x + "%";
+
+  const thread = document.createElement("div");
+  thread.className = "spider-thread";
+
+  const body = document.createElement("pre");
+  body.className = "spider-body";
+  body.textContent = SPIDER_ARTS[Math.floor(Math.random() * SPIDER_ARTS.length)];
+
+  wrapper.appendChild(thread);
+  wrapper.appendChild(body);
+  overlay.appendChild(wrapper);
+
+  function drop(startTime) {
+    requestAnimationFrame(function frame(now) {
+      const t = Math.min((now - startTime) / dropDuration, 1);
+      const eased = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+      const dropPx = eased * overlay.clientHeight * dropFraction;
+      thread.style.height = dropPx + "px";
+      const swing = swingAmp * Math.sin((now - startTime) / swingFreq) * (1 - t * 0.5);
+      wrapper.style.transform = `translateX(${swing}%)`;
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        setTimeout(() => retract(performance.now(), overlay.clientHeight * dropFraction), hangDuration);
+      }
+    });
+  }
+
+  function retract(startTime, dropPx) {
+    requestAnimationFrame(function frame(now) {
+      const t = Math.min((now - startTime) / retractDuration, 1);
+      thread.style.height = (1 - t) * dropPx + "px";
+      if (t < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        wrapper.remove();
+        activeSpiders--;
+      }
+    });
+  }
+
+  drop(performance.now());
+}
+
+function scheduleSpider() {
+  setTimeout(() => {
+    if (!spideyModeActive) return;
+    spawnSpider();
+    scheduleSpider();
+  }, 3500 + Math.random() * 4500);
+}
+
+function toggleSpideyMode() {
+  spideyModeActive = !spideyModeActive;
+  document.getElementById("spidey-btn").classList.toggle("active", spideyModeActive);
+  if (spideyModeActive) {
+    spawnSpider();
+    scheduleSpider();
+  } else {
+    document.querySelectorAll(".spider-wrapper").forEach(el => el.remove());
+    activeSpiders = 0;
+  }
 }
 
 // ─── RESIZE ──────────────────────────────────────────────────────────────────

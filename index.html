@@ -34,6 +34,7 @@
           <button class="preset-btn bg-preset-btn" data-preset="lightNeutral">Light</button>
           <button class="preset-btn bg-preset-btn" data-preset="brand">Brand</button>
           <button class="preset-btn bg-preset-btn" data-preset="brandDark">Brand Dark</button>
+          <button class="preset-btn bg-preset-btn" data-preset="sunset">Sunset</button>
         </div>
       </div>
 
@@ -45,6 +46,7 @@
           <button class="preset-btn lighting-btn" data-preset="dramatic">Dramatic</button>
           <button class="preset-btn lighting-btn" data-preset="outdoor">Outdoor</button>
           <button class="preset-btn lighting-btn" data-preset="neon">Neon</button>
+          <button class="preset-btn lighting-btn" data-preset="goldenHour">Golden Hour</button>
         </div>
       </div>
 
@@ -57,6 +59,22 @@
           <button class="preset-btn camera-btn" data-preset="top">Top</button>
           <button class="preset-btn camera-btn" data-preset="iso">Iso</button>
         </div>
+      </div>
+
+      <!-- Animate -->
+      <div class="panel-section">
+        <h2>Animate</h2>
+        <div class="btn-grid cols-3 section-row">
+          <button class="preset-btn dolly-btn" data-dolly="turntable">Turntable</button>
+          <button class="preset-btn dolly-btn" data-dolly="float">Float</button>
+          <button class="preset-btn dolly-btn" data-dolly="push">Push In</button>
+        </div>
+        <div class="btn-grid cols-3 section-row">
+          <button class="preset-btn dolly-speed-btn" data-speed="0.5">Slow</button>
+          <button class="preset-btn dolly-speed-btn active" data-speed="1">Normal</button>
+          <button class="preset-btn dolly-speed-btn" data-speed="2">Fast</button>
+        </div>
+        <button id="dolly-stop-btn" class="preset-btn dolly-stop-btn">Stop</button>
       </div>
 
       <!-- LED -->
@@ -73,11 +91,18 @@
       </div>
 
 
+      <!-- Spidey Mode -->
+      <div class="panel-section spidey-section">
+        <button class="preset-btn" id="spidey-btn">Spidey Mode</button>
+      </div>
+
     </aside>
 
     <!-- ─── 3D VIEWPORT ───────────────────────────────────────────────────── -->
     <div id="viewport">
       <canvas id="renderCanvas"></canvas>
+
+      <div id="spider-overlay"></div>
 
       <div id="loading">
         <div class="spinner-wrap">

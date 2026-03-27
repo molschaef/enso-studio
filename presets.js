@@ -51,6 +51,24 @@ const LIGHTING_PRESETS = {
       },
     ],
   },
+  goldenHour: {
+    label: "Golden Hour",
+    ambient: { color: { r: 1.0, g: 0.75, b: 0.4 }, intensity: 0.5 },
+    lights: [
+      {
+        type: "directional",
+        direction: { x: 0.3, y: -0.3, z: -1 },
+        color: { r: 1.0, g: 0.75, b: 0.3 },
+        intensity: 2.2,
+      },
+      {
+        type: "directional",
+        direction: { x: -1, y: -0.5, z: 0.5 },
+        color: { r: 1.0, g: 0.55, b: 0.2 },
+        intensity: 0.7,
+      },
+    ],
+  },
   neon: {
     label: "Neon",
     ambient: { color: { r: 0.3, g: 0.1, b: 0.5 }, intensity: 0.3 },

@@ -113,9 +113,11 @@ body {
   border-right: 1px solid var(--border);
   overflow-y: auto;
   flex-shrink: 0;
-  padding: 12px 0 24px;
+  padding: 12px 0 0;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  display: flex;
+  flex-direction: column;
 }
 #panel::-webkit-scrollbar { width: 4px; }
 #panel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
@@ -166,6 +168,29 @@ body {
   color: var(--accent-light);
   box-shadow: 0 0 0 1px var(--accent-glow);
 }
+
+/* ─── SPIDEY MODE ──────────────────────────────────────────────────────────── */
+.spidey-section {
+  margin-top: auto;
+  padding-bottom: 16px;
+}
+
+#spidey-btn {
+  width: 100%;
+}
+
+#spidey-btn.active {
+  background: linear-gradient(135deg, #cc0000 0%, #ff3333 45%, #ffffff 100%);
+  border-color: #cc0000;
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(200, 0, 0, 0.4);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+/* ─── ANIMATE SECTION ──────────────────────────────────────────────────────── */
+.section-row { margin-bottom: 6px; }
+
+.dolly-stop-btn { width: 100%; }
 
 /* ─── LED SECTION ──────────────────────────────────────────────────────────── */
 .led-toggle {
@@ -232,6 +257,44 @@ body {
   box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
+/* ─── SPIDER OVERLAY ───────────────────────────────────────────────────────── */
+#spider-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.spider-wrapper {
+  position: absolute;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform-origin: top center;
+}
+
+.spider-thread {
+  width: 1px;
+  background: rgba(210, 210, 210, 0.35);
+  flex-shrink: 0;
+}
+
+.spider-body {
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.25;
+  color: rgba(220, 220, 210, 0.6);
+  white-space: pre;
+  text-align: center;
+  user-select: none;
+  margin: 0;
+}
+
+#spider-overlay.light-bg .spider-thread { background: rgba(30, 30, 30, 0.35); }
+#spider-overlay.light-bg .spider-body   { color: rgba(20, 20, 20, 0.65); }
+
 /* ─── CANVAS & VIEWPORT ────────────────────────────────────────────────────── */
 #viewport {
   flex: 1;
@@ -284,10 +347,16 @@ body {
   max-width: 380px;
   pointer-events: all;
 }
+.load-error        { text-align: left; max-width: 420px; }
 .load-error p      { margin-bottom: 8px; line-height: 1.5; }
 .load-error p:last-child { margin-bottom: 0; }
 .load-error code   { background: var(--surface2); padding: 1px 5px; border-radius: 3px; font-family: monospace; }
 .load-error .err-detail { color: var(--muted); font-size: 11px; font-family: monospace; }
+.load-error .err-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+.load-error .err-setup-title { font-weight: 600; margin-bottom: 8px; }
+.load-error .err-steps { padding-left: 20px; margin: 0; }
+.load-error .err-steps li { margin-bottom: 6px; line-height: 1.5; }
+.load-error a      { color: #5dba7d; }
 
 /* ─── RESPONSIVE ───────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
