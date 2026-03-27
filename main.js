@@ -578,7 +578,7 @@ function spawnSpider() {
 
   wrapper._retractNow = () => {
     const currentHeight = parseFloat(thread.style.height) || 0;
-    const fastRetractDuration = retractDuration / 2;
+    const fastRetractDuration = retractDuration / 5;
     requestAnimationFrame(function frame(now) {
       if (!wrapper._retractStart) wrapper._retractStart = now;
       const t = Math.min((now - wrapper._retractStart) / fastRetractDuration, 1);
